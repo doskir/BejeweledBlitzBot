@@ -67,6 +67,8 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Gem.cs" />
+    <Compile Include="Logic.cs" />
+    <Compile Include="TestPlayArea.cs" />
     <Compile Include="TestSimpleGemClassifier.cs" />
     <Compile Include="Gemslot.cs" />
     <Compile Include="IGemClassifier.cs" />

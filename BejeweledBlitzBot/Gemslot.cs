@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 
 namespace BejeweledBlitzBot
 {
+    [DebuggerDisplay("{DebuggerDisplay()}")]
     class GemSlot
     {
         public Rectangle Rectangle;
@@ -19,6 +21,10 @@ namespace BejeweledBlitzBot
         {
             Rectangle = rectangle;
             Gem = gem;
+        }
+        private string DebuggerDisplay()
+        {
+            return Enum.GetName(typeof (GemColor), Gem.Color);
         }
     }
 

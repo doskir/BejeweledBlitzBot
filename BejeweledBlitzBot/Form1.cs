@@ -8,10 +8,11 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
+using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Form = System.Windows.Forms.Form;
+using Timer = System.Timers.Timer;
 
 namespace BejeweledBlitzBot
 {
@@ -22,29 +23,20 @@ namespace BejeweledBlitzBot
             InitializeComponent();
         }
 
-        private GameInterfacer flashAutomation;
+        private GameInterfacer _gameInterfacer;
+        private Logic _logic;
         private void button1_Click(object sender, EventArgs e)
         {
             //scroll to the flash element of the game
             Point targetScrollPosition = new Point(7,38 + 156);
             webBrowser1.Document.Window.ScrollTo(targetScrollPosition);
-            flashAutomation = new GameInterfacer(webBrowser1);
+            _gameInterfacer = new GameInterfacer(webBrowser1);
+            _logic = new Logic(_gameInterfacer);
+            _logic.StartBot();
         }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            var image = flashAutomation.ScreenShot();
-            image.Save("!test.png");
-
-        }
-        private void button3_Click(object sender, EventArgs e)
-        {
-            flashAutomation.Click(276, 291);
-        }
-
         private void button4_Click(object sender, EventArgs e)
         {
-            PlayArea playArea = new PlayArea(new Image<Bgr, byte>("!gems.png"), new SimpleGemClassifier());
+            _logic.StopBot();
         }
     }
 }
