@@ -7,7 +7,7 @@ namespace BejeweledBlitzBot
 {
     class IdiotMoveFinder : IMoveFinder
     {
-        public Move GetBestMove(Gem[,] gems, int movesToLookAhead)
+        public Move GetBestMove(Gem[,] gems, int movesToLookAhead, List<Position> lockedOutPositions)
         {
             if (movesToLookAhead < 1)
                 throw new Exception();
@@ -17,6 +17,9 @@ namespace BejeweledBlitzBot
             {
                 for (int column = 0; column < 8; column++)
                 {
+                    Position position = new Position(row, column);
+                    if (lockedOutPositions.Contains(position))
+                        continue;
                     List<Direction> validDirections = new List<Direction>();
                     if (row > 0)
                         validDirections.Add(Direction.Up);
@@ -28,6 +31,7 @@ namespace BejeweledBlitzBot
                         validDirections.Add(Direction.Right);
                     foreach (Direction direction in validDirections)
                     {
+
                         int newRow = row;
                         int newColumn = column;
                         switch (direction)
@@ -45,15 +49,19 @@ namespace BejeweledBlitzBot
                                 newColumn = column + 1;
                                 break;
                         }
+                        Position newPosition = new Position(newRow, newColumn);
+                        if (lockedOutPositions.Contains(newPosition))
+                            continue;
                         Gem[,] newArray = (Gem[,])gems.Clone();
                         SwapSlots(newArray, row, column, newRow, newColumn);
                         if (MatchExistsAt(newArray, newRow, newColumn))
-                            possibleMoves.Add(new Move(row, column, newRow, newColumn));
+                            possibleMoves.Add(new Move(new Position(row, column),
+                                                       new Position(newRow, newColumn), null));
                     }
                 }
             }
             if (possibleMoves.Count == 0)
-                return new Move(0, 0, 0, 0) { ValidMove = false };
+                return new Move(new Position(0, 0), new Position(0, 0)) {ValidMove = false};
             Random rand = new Random();
             return possibleMoves[rand.Next(possibleMoves.Count)];
         }

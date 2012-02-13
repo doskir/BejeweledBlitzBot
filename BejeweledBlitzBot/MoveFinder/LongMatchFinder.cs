@@ -1,0 +1,190 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace BejeweledBlitzBot.MoveFinder
+{
+    class LongMatchFinder : IMoveFinder
+    {
+        public Move GetBestMove(Gem[,] gems, int movesToLookAhead,List<Position> lockedOutPositions)
+        {
+            if (movesToLookAhead < 1)
+                throw new Exception();
+            List<Move> possibleMoves = new List<Move>();
+            for (int row = 0; row < 8; row++)
+            {
+                for (int column = 0; column < 8; column++)
+                {
+                    List<Direction> validDirections = new List<Direction>();
+                    Position position = new Position(row, column);
+                    if (lockedOutPositions.Contains(position))
+                        continue;
+                    if (row > 0)
+                        validDirections.Add(Direction.Up);
+                    if (row < 7)
+                        validDirections.Add(Direction.Down);
+                    if (column > 0)
+                        validDirections.Add(Direction.Left);
+                    if (column < 7)
+                        validDirections.Add(Direction.Right);
+                    foreach (Direction direction in validDirections)
+                    {
+                        int newRow = row;
+                        int newColumn = column;
+                        switch (direction)
+                        {
+                            case Direction.Up:
+                                newRow = row - 1;
+                                break;
+                            case Direction.Down:
+                                newRow = row + 1;
+                                break;
+                            case Direction.Left:
+                                newColumn = column - 1;
+                                break;
+                            case Direction.Right:
+                                newColumn = column + 1;
+                                break;
+                        }
+                        Position newPosition = new Position(newRow, newColumn);
+                        if (lockedOutPositions.Contains(newPosition))
+                            continue;
+                        Gem[,] newArray = (Gem[,])gems.Clone();
+                        SwapSlots(newArray, row, column, newRow, newColumn);
+                        List<Position> involvedGems = MatchedGemsAt(newArray, new Position(newRow, newColumn));
+                        if (involvedGems.Count >= 2)
+                            possibleMoves.Add(new Move(new Position(row,column),new Position(newRow,newColumn),involvedGems)
+                                                  {GuaranteedScore = involvedGems.Count*100});
+                    }
+                }
+            }
+            if (possibleMoves.Count == 0)
+                return new Move(new Position(0,0),new Position(0,0)) { ValidMove = false };
+            return possibleMoves.OrderBy(m => m.GuaranteedScore).Last();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gemArray"></param>
+        /// <param name="originRow"></param>
+        /// <param name="originColumn"></param>
+        /// <returns>The length of the match,if there is T or L shaped match it will return the number of gems involved in the match</returns>
+        int MatchLengthAt(Gem[,] gemArray, int originRow, int originColumn)
+        {
+            GemColor myColor = gemArray[originRow, originColumn].Color;
+            int matchingGemsLeft = 0;
+            for (int column = originColumn - 1; column >= 0;column--)
+            {
+                if (gemArray[originRow, column].Color == myColor)
+                    matchingGemsLeft++;
+                else
+                    break;
+            }
+            int matchingGemsRight = 0;
+            for (int column = originColumn + 1; column < 8;column++)
+            {
+                if (gemArray[originRow, column].Color == myColor)
+                    matchingGemsRight++;
+                else
+                    break;
+            }
+
+            int matchingGemsAbove = 0;
+            for (int row = originRow - 1; row >= 0;row--)
+            {
+                if (gemArray[row, originColumn].Color == myColor)
+                    matchingGemsAbove++;
+                else
+                    break;
+            }
+            int matchingGemsBelow = 0;
+            for(int row = originRow + 1;row < 8;row++)
+            {
+                if (gemArray[row, originColumn].Color == myColor)
+                    matchingGemsBelow++;
+                else
+                    break;
+            }
+            int horizontalMatchLength = matchingGemsLeft + matchingGemsRight + 1;
+            int verticalMatchLength = matchingGemsAbove + matchingGemsBelow + 1;
+            if(horizontalMatchLength >= 3 && verticalMatchLength >= 3)
+            {
+                //we have an L or T shaped match and will create a star gem
+                //remove 1 so we don't count the origin gem twice
+                return horizontalMatchLength + verticalMatchLength - 1;
+            }
+            return Math.Max(horizontalMatchLength, verticalMatchLength);
+        }
+        List<Position> MatchedGemsAt(Gem[,] gemArray,Position origin)
+        {
+            GemColor myColor = gemArray[origin.Row, origin.Column].Color;
+            List<Position> matchingGemsLeft = new List<Position>();
+            for (int column = origin.Column - 1; column >= 0; column--)
+            {
+                if (gemArray[origin.Row, column].Color == myColor)
+                    matchingGemsLeft.Add(new Position(origin.Row, column));
+                else
+                    break;
+            }
+            List<Position> matchingGemsRight = new List<Position>();
+            for (int column = origin.Column + 1; column < 8; column++)
+            {
+                if (gemArray[origin.Row, column].Color == myColor)
+                    matchingGemsRight.Add(new Position(origin.Row, column));
+                else
+                    break;
+            }
+
+            List<Position> matchingGemsAbove = new List<Position>();
+            for (int row = origin.Row - 1; row >= 0; row--)
+            {
+                if (gemArray[row, origin.Column].Color == myColor)
+                    matchingGemsAbove.Add(new Position(row, origin.Column));
+                else
+                    break;
+            }
+            List<Position> matchingGemsBelow = new List<Position>();
+            for (int row = origin.Row + 1; row < 8; row++)
+            {
+                if (gemArray[row, origin.Column].Color == myColor)
+                    matchingGemsBelow.Add(new Position(row, origin.Column));
+                else
+                    break;
+            }
+            List<Position> horizontalMatch = new List<Position>(matchingGemsLeft);
+            horizontalMatch.AddRange(matchingGemsRight);
+            List<Position> verticalMatch = new List<Position>(matchingGemsAbove);
+            verticalMatch.AddRange(matchingGemsBelow);
+
+            if (horizontalMatch.Count < 2)
+                horizontalMatch.RemoveRange(0, horizontalMatch.Count);
+            if (verticalMatch.Count < 2)
+                verticalMatch.RemoveRange(0, verticalMatch.Count);
+
+            if (horizontalMatch.Count >= 3)
+            {
+                //fire gem will be created
+            }
+            else if(horizontalMatch.Count >= 2 && verticalMatch.Count >= 2)
+            {
+                //star gem will be created
+            }
+
+            List<Position> involvedGems = new List<Position>(horizontalMatch);
+            involvedGems.AddRange(verticalMatch);
+            return involvedGems;
+        }
+        enum Direction
+        {
+            Up, Down, Left, Right
+        }
+
+        void SwapSlots(Gem[,] gemArray, int fromRow, int fromColumn, int toRow, int toColumn)
+        {
+            Gem temp = gemArray[fromRow, fromColumn];
+            gemArray[fromRow, fromColumn] = gemArray[toRow, toColumn];
+            gemArray[toRow, toColumn] = temp;
+        }
+    }
+}

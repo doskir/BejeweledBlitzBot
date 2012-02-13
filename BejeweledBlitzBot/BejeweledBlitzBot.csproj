@@ -67,10 +67,11 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Gem.cs" />
-    <Compile Include="MoveFinder\ChainFinder.cs" />
+    <Compile Include="MoveFinder\LongMatchFinder.cs" />
     <Compile Include="MoveFinder\IdiotMoveFinder.cs" />
     <Compile Include="MoveFinder\IMoveFinder.cs" />
     <Compile Include="Logic.cs" />
+    <Compile Include="Position.cs" />
     <Compile Include="Tests\TestPlayArea.cs" />
     <Compile Include="Tests\TestSimpleGemClassifier.cs" />
     <Compile Include="Gemslot.cs" />

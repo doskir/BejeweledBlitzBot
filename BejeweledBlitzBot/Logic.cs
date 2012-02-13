@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using BejeweledBlitzBot.MoveFinder;
 
 namespace BejeweledBlitzBot
 {
@@ -13,7 +14,7 @@ namespace BejeweledBlitzBot
         private ImageProcessing _imageProcessing = new ImageProcessing();
         private IGemClassifier _gemClassifier = new SimpleGemClassifier();
         private PlayArea _currentPlayArea;
-        private IMoveFinder _moveFinder = new IdiotMoveFinder();
+        private IMoveFinder _moveFinder = new LongMatchFinder();
         private Thread _botThread;
         private bool _running;
         public Logic(GameInterfacer gameInterfacer)
@@ -37,18 +38,28 @@ namespace BejeweledBlitzBot
             {
                 //get new data
                 _currentPlayArea.UpdateWithScreenshot(_gameInterfacer.ScreenShot());
+                //get the locked out positions
+                List<Position> lockedOutPositions = _currentPlayArea.GetLockedOutPositions();
                 //get the best move
-                Move bestMove = _moveFinder.GetBestMove(_currentPlayArea.ToGemArray(), 1);
+                Move bestMove = _moveFinder.GetBestMove(_currentPlayArea.ToGemArray(), 1, lockedOutPositions);
                 if (bestMove.ValidMove)
                 {
                     //execute the move
-                    Point from = _currentPlayArea.GemSlots[bestMove.FromRow, bestMove.FromColumn].Rectangle.Center();
-                    Point to = _currentPlayArea.GemSlots[bestMove.ToRow, bestMove.ToColumn].Rectangle.Center();
+                    Point from = _currentPlayArea.GemSlots[bestMove.From.Row, bestMove.From.Column].Rectangle.Center();
+                    Point to = _currentPlayArea.GemSlots[bestMove.To.Row, bestMove.To.Column].Rectangle.Center();
                     //click on the first gem
                     _gameInterfacer.Click(from.X, from.Y);
                     //maybe put a sleep here ?
                     //click on the second gem, initiating the swap
                     _gameInterfacer.Click(to.X, to.Y);
+                    if(bestMove.UsedPositions != null)
+                    {
+                        foreach(Position position in bestMove.UsedPositions)
+                        {
+                            _currentPlayArea.GemSlots[position.Row, position.Column].LockedUntil =
+                                DateTime.Now.AddMilliseconds(500);
+                        }
+                    }
                 }
                 //wait then repeat
                 Thread.Sleep(50);

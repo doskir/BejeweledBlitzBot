@@ -12,6 +12,7 @@ namespace BejeweledBlitzBot
     {
         public Rectangle Rectangle;
         public Gem Gem;
+        public DateTime LockedUntil = DateTime.MinValue;
         public GemSlot(Rectangle rectangle) : this(rectangle, new Gem(GemColor.Unknown, GemType.Unknown))
         {
             

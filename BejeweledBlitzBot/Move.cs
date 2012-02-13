@@ -7,20 +7,21 @@ namespace BejeweledBlitzBot
 {
     internal class Move
     {
-        public int FromRow;
-        public int FromColumn;
-        public int ToRow;
-        public int ToColumn;
+        public Position From;
+        public Position To;
         public bool ValidMove = true;
         public int GuaranteedScore;
-
-        public Move(int fromRow, int fromColumn, int toRow, int toColumn)
+        public List<Position> UsedPositions = new List<Position>(); 
+        public Move(Position from, Position to,List<Position> usedPositions)
         {
-            FromRow = fromRow;
-            FromColumn = fromColumn;
-            ToRow = toRow;
-            ToColumn = toColumn;
+            From = from;
+            To = to;
+            UsedPositions = usedPositions;
+        }
 
+        public Move(Position from, Position to) : this(from, to, null)
+        {
+            
         }
     }
 }

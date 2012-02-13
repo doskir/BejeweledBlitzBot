@@ -7,6 +7,6 @@ namespace BejeweledBlitzBot
 {
     interface IMoveFinder
     {
-        Move GetBestMove(Gem[,] gems, int movesToLookAhead);
+        Move GetBestMove(Gem[,] gems, int movesToLookAhead,List<Position> lockedOutPositions);
     }
 }

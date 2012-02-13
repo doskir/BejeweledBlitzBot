@@ -40,11 +40,11 @@ namespace BejeweledBlitzBot
             int counter = 0;
             while(true)
             {
-                Move bestMove = moveFinder.GetBestMove(playArea.ToGemArray(), 1);
+                Move bestMove = moveFinder.GetBestMove(playArea.ToGemArray(), 1,null);
                 if (bestMove.ValidMove)
                 {
                     counter++;
-                    playArea.GemSlots[bestMove.FromRow, bestMove.FromColumn].Gem.Color = GemColor.Unknown;
+                    playArea.GemSlots[bestMove.From.Row, bestMove.From.Column].Gem.Color = GemColor.Unknown;
                 }
                 else
                     break;

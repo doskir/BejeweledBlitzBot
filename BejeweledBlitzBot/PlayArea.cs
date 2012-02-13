@@ -89,5 +89,18 @@ namespace BejeweledBlitzBot
             }
             return gemArray;
         }
+        public List<Position> GetLockedOutPositions()
+        {
+            List<Position> lockedOutPositions = new List<Position>();
+            for (int row = 0; row < 8; row++)
+            {
+                for (int column = 0; column < 8; column++)
+                {
+                    if (GemSlots[row, column].LockedUntil > DateTime.Now)
+                        lockedOutPositions.Add(new Position(row, column));
+                }
+            }
+            return lockedOutPositions;
+        }
     }
 }
