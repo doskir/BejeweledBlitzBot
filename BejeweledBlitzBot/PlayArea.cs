@@ -87,15 +87,16 @@ namespace BejeweledBlitzBot
         {
             if (moves < 1)
                 throw new Exception();
+            List<Move> possibleMoves = new List<Move>();
             Gem[,] gemArray = new Gem[8,8];
-            for (int row = 0; row < 8;row++)
+            for (int row = 0; row < 8; row++)
             {
-                for(int column = 0;column < 8;column++)
+                for (int column = 0; column < 8; column++)
                 {
                     gemArray[row, column] = GemSlots[row, column].Gem;
                 }
             }
-                //for now simply return the first match (from the top left) we find
+            //for now simply return the first match (from the top left) we find
             for (int row = 0; row < 8; row++)
             {
                 for (int column = 0; column < 8; column++)
@@ -128,14 +129,18 @@ namespace BejeweledBlitzBot
                                 newColumn = column + 1;
                                 break;
                         }
-                        Gem[,] newArray = (Gem[,])gemArray.Clone();
+                        Gem[,] newArray = (Gem[,]) gemArray.Clone();
                         SwapSlots(newArray, row, column, newRow, newColumn);
                         if (MatchExistsAt(newArray, newRow, newColumn))
-                            return new Move(row, column, newRow, newColumn);
+                            possibleMoves.Add(new Move(row, column, newRow, newColumn));
                     }
                 }
             }
-            return new Move(0, 0, 0, 0) {ValidMove = false};
+            if (possibleMoves.Count == 0)
+                return new Move(0, 0, 0, 0) {ValidMove = false};
+            Random rand = new Random();
+            return possibleMoves[rand.Next(possibleMoves.Count)];
+
         }
 
         bool MatchExistsAt(Gem[,] gemArray,int row, int column)
