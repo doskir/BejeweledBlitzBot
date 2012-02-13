@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AxInterop.ShockwaveFlashObjects">
-      <HintPath>..\..\BurgerBot\BurgerBot\bin\Debug\AxInterop.ShockwaveFlashObjects.dll</HintPath>
-    </Reference>
     <Reference Include="Emgu.CV">
       <HintPath>..\..\..\..\..\..\Emgu\emgucv-windows-x86 2.3.0.1416\bin\Emgu.CV.dll</HintPath>
     </Reference>
@@ -48,6 +45,7 @@
       <HintPath>..\..\..\..\..\..\Emgu\emgucv-windows-x86 2.3.0.1416\bin\Emgu.CV.UI.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.Util, Version=2.3.0.1416, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
+    <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -60,15 +58,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FlashAutomation.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="GameInterfacer.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gem.cs" />
+    <Compile Include="TestSimpleGemClassifier.cs" />
+    <Compile Include="Gemslot.cs" />
+    <Compile Include="IGemClassifier.cs" />
+    <Compile Include="ImageProcessing.cs" />
+    <Compile Include="Move.cs" />
+    <Compile Include="PlayArea.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleGemClassifier.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -138,15 +145,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="ShockwaveFlashObjects">
-      <Guid>{D27CDB6B-AE6D-11CF-96B8-444553540000}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+    <Folder Include="TestGems\Blue\" />
+    <Folder Include="TestGems\Green\" />
+    <Folder Include="TestGems\Orange\" />
+    <Folder Include="TestGems\Red\" />
+    <Folder Include="TestGems\Violet\" />
+    <Folder Include="TestGems\White\" />
+    <Folder Include="TestGems\Yellow\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

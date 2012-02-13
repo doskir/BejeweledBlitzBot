@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using ShockwaveFlashObjects;
 using Form = System.Windows.Forms.Form;
 
 namespace BejeweledBlitzBot
@@ -23,13 +22,13 @@ namespace BejeweledBlitzBot
             InitializeComponent();
         }
 
-        private FlashAutomation flashAutomation;
+        private GameInterfacer flashAutomation;
         private void button1_Click(object sender, EventArgs e)
         {
             //scroll to the flash element of the game
             Point targetScrollPosition = new Point(7,38 + 156);
             webBrowser1.Document.Window.ScrollTo(targetScrollPosition);
-            flashAutomation = new FlashAutomation(webBrowser1);
+            flashAutomation = new GameInterfacer(webBrowser1);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -45,8 +44,7 @@ namespace BejeweledBlitzBot
 
         private void button4_Click(object sender, EventArgs e)
         {
-           
-
+            PlayArea playArea = new PlayArea(new Image<Bgr, byte>("!gems.png"), new SimpleGemClassifier());
         }
     }
 }

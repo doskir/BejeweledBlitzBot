@@ -7,15 +7,14 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using AxShockwaveFlashObjects;
 using Emgu.CV;
 using Emgu.CV.Structure;
 
 namespace BejeweledBlitzBot
 {
-    internal class FlashAutomation
+    internal class GameInterfacer
     {
-        public FlashAutomation(WebBrowser webBrowser)
+        public GameInterfacer(WebBrowser webBrowser)
         {
             FlashHandle = GetFlashObjectHandle(webBrowser);
         }
