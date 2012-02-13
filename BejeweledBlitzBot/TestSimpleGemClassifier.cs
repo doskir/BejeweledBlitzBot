@@ -41,6 +41,8 @@ namespace BejeweledBlitzBot
             foreach(string directory in System.IO.Directory.GetDirectories("..\\..\\TestGems"))
             {
                 string expectedColorString = System.IO.Path.GetFileName(directory);
+                if (expectedColorString == "Nothing" || expectedColorString == "Overlaid" || expectedColorString == "Moving")
+                    continue;
                 GemColor expectedColor = (GemColor) Enum.Parse(typeof(GemColor),expectedColorString);
                 foreach(string gemPath in System.IO.Directory.GetFiles(directory))
                 {
@@ -51,11 +53,13 @@ namespace BejeweledBlitzBot
                     {
                         Console.Error.WriteLine("Misclassified: {0} a {1} gem as a {2} gem", gemPath, expectedColor,
                                                 gem.Color);
+                        gemClassifier.ClassifyGem(new Image<Bgr, byte>(gemPath));
                     }
                     testedGems++;
                 }
             }
             //we aim for 100% precision
+            Console.WriteLine("{0} of {1} gems were correctly classified.", correctGems, testedGems);
             Assert.That(correctGems == testedGems);
         }
 

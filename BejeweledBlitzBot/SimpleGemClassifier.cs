@@ -81,8 +81,11 @@ namespace BejeweledBlitzBot
                 smallestDistance = yellowDistance;
                 color = GemColor.Yellow;
             }
-
-            Debug.WriteLine("{0}: {1}", color, averageBgr);
+            if (smallestDistance >= 20.0)
+            {
+                return new Gem(GemColor.Unknown, GemType.Unknown);
+                Debug.WriteLine("{0}: {1} Distance: {2}", color,averageBgr, smallestDistance);
+            }
             return new Gem(color, GemType.Normal);
         }
         /// <summary>
