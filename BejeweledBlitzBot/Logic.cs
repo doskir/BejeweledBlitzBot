@@ -14,7 +14,7 @@ namespace BejeweledBlitzBot
         private ImageProcessing _imageProcessing = new ImageProcessing();
         private IGemClassifier _gemClassifier = new SimpleGemClassifier();
         private PlayArea _currentPlayArea;
-        private IMoveFinder _moveFinder = new LongMatchFinder();
+        private IMoveFinder _moveFinder = new IdiotMoveFinder();
         private Thread _botThread;
         private bool _running;
         public Logic(GameInterfacer gameInterfacer)
