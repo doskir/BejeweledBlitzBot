@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -64,10 +65,14 @@ namespace BejeweledBlitzBot
 
         public Image<Bgr, byte> ScreenShot()
         {
+            return ScreenShot(FlashHandle);
+        }
+        public Image<Bgr, byte> ScreenShot(IntPtr handle)
+        {
             Bitmap frame = new Bitmap(760, 596);
             Graphics g = Graphics.FromImage(frame);
             IntPtr dc = g.GetHdc();
-            PrintWindow(FlashHandle, dc, 1);
+            PrintWindow(handle, dc, 1);
             g.ReleaseHdc();
             //we have the bitmap now
             //turn it into an Image for emgu
@@ -96,18 +101,17 @@ namespace BejeweledBlitzBot
             GCHandle listHandle = GCHandle.Alloc(result);
             EnumWindowsProc childProc = new EnumWindowsProc(EnumWindow);
             EnumChildWindows(webBrowser.Handle, childProc, GCHandle.ToIntPtr(listHandle));
-#if DEBUG
             foreach (IntPtr ptr in result)
             {
-
-                Rectangle rectangle = GetWindowRectangle(ptr);
-                Debug.WriteLine("{0}: W:{1} H:{2}", ptr, rectangle.Width, rectangle.Height);
+                //only one of the handles will be correct and its class name will be "Internet Explorer_Server"
+                //all other handles will ignore input or at least not forward it to the game
+                if (isIEServerWindow(ptr))
+                {
+                    return ptr;
+                }
             }
-#endif
-            //it looks like the last handle always points to the flash object with bejeweled blitz in it
-            return result.Last();
+            return IntPtr.Zero;
         }
-
         private static bool EnumWindow(IntPtr handle, IntPtr pointer)
         {
             GCHandle gch = GCHandle.FromIntPtr(pointer);
@@ -160,12 +164,29 @@ namespace BejeweledBlitzBot
 
         public Rectangle GetWindowRectangle(IntPtr handle)
         {
-            WINDOWINFO info = new WINDOWINFO();
+            WINDOWINFO info = new WINDOWINFO();            
             info.cbSize = (uint) Marshal.SizeOf(info);
             GetWindowInfo(handle, ref info);
             Rectangle rectangle = new Rectangle(0, 0, info.rcClient.Right - info.rcClient.Left,
                                                 info.rcClient.Bottom - info.rcClient.Top);
             return rectangle;
+        }
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Ansi)]
+        static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+        private static bool isIEServerWindow(IntPtr hWnd)
+        {
+            int nRet;
+            StringBuilder ClassName = new StringBuilder(100);
+            //Get the window class name
+            nRet = GetClassName(hWnd, ClassName, ClassName.Capacity);
+            if (nRet != 0)
+            {
+                return (string.Compare(ClassName.ToString(), "Internet Explorer_Server", true, CultureInfo.InvariantCulture) == 0);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         #endregion
