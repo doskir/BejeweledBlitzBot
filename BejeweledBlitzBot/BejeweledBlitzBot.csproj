@@ -67,17 +67,20 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Gem.cs" />
+    <Compile Include="MoveFinder\ChainFinder.cs" />
+    <Compile Include="MoveFinder\IdiotMoveFinder.cs" />
+    <Compile Include="MoveFinder\IMoveFinder.cs" />
     <Compile Include="Logic.cs" />
-    <Compile Include="TestPlayArea.cs" />
-    <Compile Include="TestSimpleGemClassifier.cs" />
+    <Compile Include="Tests\TestPlayArea.cs" />
+    <Compile Include="Tests\TestSimpleGemClassifier.cs" />
     <Compile Include="Gemslot.cs" />
-    <Compile Include="IGemClassifier.cs" />
+    <Compile Include="GemClassifier\IGemClassifier.cs" />
     <Compile Include="ImageProcessing.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="PlayArea.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleGemClassifier.cs" />
+    <Compile Include="GemClassifier\SimpleGemClassifier.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

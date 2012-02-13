@@ -12,6 +12,7 @@ namespace BejeweledBlitzBot
         public int ToRow;
         public int ToColumn;
         public bool ValidMove = true;
+        public int GuaranteedScore;
 
         public Move(int fromRow, int fromColumn, int toRow, int toColumn)
         {

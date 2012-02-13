@@ -36,10 +36,11 @@ namespace BejeweledBlitzBot
         public void GetBestMoveTest()
         {
             PlayArea playArea = new PlayArea(new Image<Bgr, byte>("testplayarea.png"), new SimpleGemClassifier());
+            IMoveFinder moveFinder = new IdiotMoveFinder();
             int counter = 0;
             while(true)
             {
-                Move bestMove = playArea.GetBestMove(1);
+                Move bestMove = moveFinder.GetBestMove(playArea.ToGemArray(), 1);
                 if (bestMove.ValidMove)
                 {
                     counter++;

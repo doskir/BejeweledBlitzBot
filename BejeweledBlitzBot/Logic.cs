@@ -13,6 +13,7 @@ namespace BejeweledBlitzBot
         private ImageProcessing _imageProcessing = new ImageProcessing();
         private IGemClassifier _gemClassifier = new SimpleGemClassifier();
         private PlayArea _currentPlayArea;
+        private IMoveFinder _moveFinder = new IdiotMoveFinder();
         private Thread _botThread;
         private bool _running;
         public Logic(GameInterfacer gameInterfacer)
@@ -37,7 +38,7 @@ namespace BejeweledBlitzBot
                 //get new data
                 _currentPlayArea.UpdateWithScreenshot(_gameInterfacer.ScreenShot());
                 //get the best move
-                Move bestMove = _currentPlayArea.GetBestMove(1);
+                Move bestMove = _moveFinder.GetBestMove(_currentPlayArea.ToGemArray(), 1);
                 if (bestMove.ValidMove)
                 {
                     //execute the move
