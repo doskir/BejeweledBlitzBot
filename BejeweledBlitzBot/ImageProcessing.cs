@@ -1,9 +1,5 @@
 ﻿
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
 namespace BejeweledBlitzBot
@@ -14,6 +10,7 @@ namespace BejeweledBlitzBot
         /// Extracts each gems rectangle in the image
         /// </summary>
         /// <param name="screenshot">An image of the current playing area (without windowborders)</param>
+        /// <param name="gemSlots"></param>
         /// <returns>A two-dimensional array of images in the [row,column] format</returns>
         public Image<Bgr, byte>[,] ExtractGemSlots(Image<Bgr, byte> screenshot, GemSlot[,] gemSlots)
         {

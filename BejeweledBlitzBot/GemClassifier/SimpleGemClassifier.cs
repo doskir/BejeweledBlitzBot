@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using Emgu.CV;
 using Emgu.CV.Structure;
 
-namespace BejeweledBlitzBot
+namespace BejeweledBlitzBot.GemClassifier
 {
     class SimpleGemClassifier : IGemClassifier
     {
@@ -84,7 +80,6 @@ namespace BejeweledBlitzBot
             if (smallestDistance >= 20.0)
             {
                 return new Gem(GemColor.Unknown, GemType.Unknown);
-                Debug.WriteLine("{0}: {1} Distance: {2}", color,averageBgr, smallestDistance);
             }
             return new Gem(color, GemType.Normal);
         }

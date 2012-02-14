@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -105,7 +103,7 @@ namespace BejeweledBlitzBot
             {
                 //only one of the handles will be correct and its class name will be "Internet Explorer_Server"
                 //all other handles will ignore input or at least not forward it to the game
-                if (isIEServerWindow(ptr))
+                if (IsIEServerWindow(ptr))
                 {
                     return ptr;
                 }
@@ -125,63 +123,18 @@ namespace BejeweledBlitzBot
             return true;
         }
 
-        #region WindowInfo
+        #region GetClassName
 
-        [return: MarshalAs(UnmanagedType.Bool)]
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool GetWindowInfo(IntPtr hwnd, ref WINDOWINFO pwi);
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct WINDOWINFO
-        {
-            public uint cbSize;
-            public RECT rcWindow;
-            public RECT rcClient;
-            public uint dwStyle;
-            public uint dwExStyle;
-            public uint dwWindowStatus;
-            public uint cxWindowBorders;
-            public uint cyWindowBorders;
-            public ushort atomWindowType;
-            public ushort wCreatorVersion;
-
-            public WINDOWINFO(Boolean? filler)
-                : this() // Allows automatic initialization of "cbSize" with "new WINDOWINFO(null/true/false)".
-            {
-                cbSize = (UInt32) (Marshal.SizeOf(typeof (WINDOWINFO)));
-            }
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-        }
-
-        public Rectangle GetWindowRectangle(IntPtr handle)
-        {
-            WINDOWINFO info = new WINDOWINFO();            
-            info.cbSize = (uint) Marshal.SizeOf(info);
-            GetWindowInfo(handle, ref info);
-            Rectangle rectangle = new Rectangle(0, 0, info.rcClient.Right - info.rcClient.Left,
-                                                info.rcClient.Bottom - info.rcClient.Top);
-            return rectangle;
-        }
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Ansi)]
         static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
-        private static bool isIEServerWindow(IntPtr hWnd)
+        private static bool IsIEServerWindow(IntPtr hWnd)
         {
-            int nRet;
-            StringBuilder ClassName = new StringBuilder(100);
+            StringBuilder className = new StringBuilder(100);
             //Get the window class name
-            nRet = GetClassName(hWnd, ClassName, ClassName.Capacity);
+            int nRet = GetClassName(hWnd, className, className.Capacity);
             if (nRet != 0)
             {
-                return (string.Compare(ClassName.ToString(), "Internet Explorer_Server", true, CultureInfo.InvariantCulture) == 0);
+                return (string.Compare(className.ToString(), "Internet Explorer_Server", true, CultureInfo.InvariantCulture) == 0);
             }
             else
             {

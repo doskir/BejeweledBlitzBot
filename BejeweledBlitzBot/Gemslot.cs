@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 
 namespace BejeweledBlitzBot
 {
@@ -23,7 +20,9 @@ namespace BejeweledBlitzBot
             Rectangle = rectangle;
             Gem = gem;
         }
+// ReSharper disable UnusedMember.Local
         private string DebuggerDisplay()
+// ReSharper restore UnusedMember.Local
         {
             return Enum.GetName(typeof (GemColor), Gem.Color);
         }

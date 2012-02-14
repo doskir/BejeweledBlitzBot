@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace BejeweledBlitzBot
+namespace BejeweledBlitzBot.MoveFinder
 {
     class IdiotMoveFinder : IMoveFinder
     {
@@ -123,42 +121,6 @@ namespace BejeweledBlitzBot
             List<Position> involvedGems = new List<Position>(horizontalMatch);
             involvedGems.AddRange(verticalMatch);
             return involvedGems;
-        }
-        bool MatchExistsAt(Gem[,] gemArray, int row, int column)
-        {
-            GemColor myColor = gemArray[row, column].Color;
-            //check for a horizontal match with the current gem at the left
-            if (column < 6)
-                if (gemArray[row, column + 1].Color == myColor
-                    && gemArray[row, column + 2].Color == myColor)
-                    return true;
-            //check for a horizontal match with the current gem at the center
-            if (column > 0 && column < 7)
-                if (gemArray[row, column - 1].Color == myColor
-                    && gemArray[row, column + 1].Color == myColor)
-                    return true;
-            //check for a horizontal mathc with the current gem at the right
-            if (column > 1)
-                if (gemArray[row, column - 1].Color == myColor
-                    && gemArray[row, column - 2].Color == myColor)
-                    return true;
-            //check for a vertical match with the current gem at the top
-            if (row < 6)
-                if (gemArray[row + 1, column].Color == myColor
-                    && gemArray[row + 2, column].Color == myColor)
-                    return true;
-            //check for a vertical match with the current gem at the center
-            if (row > 0 && row < 7)
-                if (gemArray[row - 1, column].Color == myColor
-                    && gemArray[row + 1, column].Color == myColor)
-                    return true;
-            //check for a vertical match with the current gem at the bottom
-            if (row > 1)
-                if (gemArray[row - 1, column].Color == myColor
-                    && gemArray[row - 2, column].Color == myColor)
-                    return true;
-
-            return false;
         }
         enum Direction
         {

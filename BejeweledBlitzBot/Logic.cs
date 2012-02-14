@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
+using BejeweledBlitzBot.GemClassifier;
 using BejeweledBlitzBot.MoveFinder;
 
 namespace BejeweledBlitzBot
@@ -11,7 +10,6 @@ namespace BejeweledBlitzBot
     class Logic
     {
         private GameInterfacer _gameInterfacer;
-        private ImageProcessing _imageProcessing = new ImageProcessing();
         private IGemClassifier _gemClassifier = new SimpleGemClassifier();
         private PlayArea _currentPlayArea;
         private IMoveFinder _moveFinder = new IdiotMoveFinder();

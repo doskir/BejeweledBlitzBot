@@ -63,59 +63,7 @@ namespace BejeweledBlitzBot.MoveFinder
                 return new Move(new Position(0,0),new Position(0,0)) { ValidMove = false };
             return possibleMoves.OrderBy(m => m.GuaranteedScore).Last();
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="gemArray"></param>
-        /// <param name="originRow"></param>
-        /// <param name="originColumn"></param>
-        /// <returns>The length of the match,if there is T or L shaped match it will return the number of gems involved in the match</returns>
-        int MatchLengthAt(Gem[,] gemArray, int originRow, int originColumn)
-        {
-            GemColor myColor = gemArray[originRow, originColumn].Color;
-            int matchingGemsLeft = 0;
-            for (int column = originColumn - 1; column >= 0;column--)
-            {
-                if (gemArray[originRow, column].Color == myColor)
-                    matchingGemsLeft++;
-                else
-                    break;
-            }
-            int matchingGemsRight = 0;
-            for (int column = originColumn + 1; column < 8;column++)
-            {
-                if (gemArray[originRow, column].Color == myColor)
-                    matchingGemsRight++;
-                else
-                    break;
-            }
 
-            int matchingGemsAbove = 0;
-            for (int row = originRow - 1; row >= 0;row--)
-            {
-                if (gemArray[row, originColumn].Color == myColor)
-                    matchingGemsAbove++;
-                else
-                    break;
-            }
-            int matchingGemsBelow = 0;
-            for(int row = originRow + 1;row < 8;row++)
-            {
-                if (gemArray[row, originColumn].Color == myColor)
-                    matchingGemsBelow++;
-                else
-                    break;
-            }
-            int horizontalMatchLength = matchingGemsLeft + matchingGemsRight + 1;
-            int verticalMatchLength = matchingGemsAbove + matchingGemsBelow + 1;
-            if(horizontalMatchLength >= 3 && verticalMatchLength >= 3)
-            {
-                //we have an L or T shaped match and will create a star gem
-                //remove 1 so we don't count the origin gem twice
-                return horizontalMatchLength + verticalMatchLength - 1;
-            }
-            return Math.Max(horizontalMatchLength, verticalMatchLength);
-        }
         List<Position> MatchedGemsAt(Gem[,] gemArray,Position origin)
         {
             GemColor myColor = gemArray[origin.Row, origin.Column].Color;

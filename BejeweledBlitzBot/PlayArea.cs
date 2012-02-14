@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using BejeweledBlitzBot.GemClassifier;
 using Emgu.CV;
 using Emgu.CV.Structure;
 
@@ -37,8 +35,8 @@ namespace BejeweledBlitzBot
             //row 1 column 0 top left is at 175,149
             //row 0 column 0 top left should be at 175,109
             GemSlot[,] gemSlots = new GemSlot[8,8];
-            Point baseOffset = Point.Empty;
-            Size gemAreaSize = Size.Empty;
+            Point baseOffset;
+            Size gemAreaSize;
             if (playAreaResolution.Width == 760 && playAreaResolution.Height == 596)
             {
                 baseOffset = new Point(175, 109);

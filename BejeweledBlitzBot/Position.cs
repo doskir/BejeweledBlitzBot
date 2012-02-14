@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace BejeweledBlitzBot
 {
@@ -17,7 +14,7 @@ namespace BejeweledBlitzBot
 
         public bool Equals(Position other)
         {
-            return this.Row == other.Row && this.Column == other.Column;
+            return Row == other.Row && Column == other.Column;
         }
     }
 }

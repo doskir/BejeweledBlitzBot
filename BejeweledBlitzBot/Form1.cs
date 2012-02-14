@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Windows.Forms;
-using Emgu.CV;
-using Emgu.CV.Structure;
 using Form = System.Windows.Forms.Form;
-using Timer = System.Timers.Timer;
 
 namespace BejeweledBlitzBot
 {
@@ -31,11 +20,14 @@ namespace BejeweledBlitzBot
         {
             //scroll to the flash element of the game
             Point targetScrollPosition = new Point(7,38 + 156);
+// ReSharper disable PossibleNullReferenceException
+// if this is 0 we can't do anything anyway
             webBrowser1.Document.Window.ScrollTo(targetScrollPosition);
+// ReSharper restore PossibleNullReferenceException
             if (_gameInterfacer == null)
             {
                 _gameInterfacer = new GameInterfacer(webBrowser1);
-                Debug.WriteLine(this.Handle);
+                Debug.WriteLine(Handle);
             }
             _logic = new Logic(_gameInterfacer);
             _logic.StartBot();

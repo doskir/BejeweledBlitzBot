@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using BejeweledBlitzBot.GemClassifier;
+using BejeweledBlitzBot.MoveFinder;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using NUnit.Framework;
 
-namespace BejeweledBlitzBot
+namespace BejeweledBlitzBot.Tests
 {
     [TestFixture]
     public class TestPlayArea

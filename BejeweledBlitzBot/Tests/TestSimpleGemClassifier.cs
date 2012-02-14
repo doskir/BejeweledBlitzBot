@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using BejeweledBlitzBot.GemClassifier;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using NUnit.Framework;
 
-namespace BejeweledBlitzBot
+namespace BejeweledBlitzBot.Tests
 {
     [TestFixture]
     public class TestSimpleGemClassifier
@@ -38,6 +36,7 @@ namespace BejeweledBlitzBot
             SimpleGemClassifier gemClassifier = new SimpleGemClassifier();
             int testedGems = 0;
             int correctGems = 0;
+        
             foreach(string directory in System.IO.Directory.GetDirectories("..\\..\\TestGems"))
             {
                 string expectedColorString = System.IO.Path.GetFileName(directory);
