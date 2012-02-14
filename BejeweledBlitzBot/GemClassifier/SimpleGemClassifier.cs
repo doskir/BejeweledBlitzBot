@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -79,6 +80,16 @@ namespace BejeweledBlitzBot.GemClassifier
             }
             if (smallestDistance >= 20.0)
             {
+                Debug.WriteLine("------");
+                Debug.WriteLine("Average BGR:{0}", averageBgr);
+                Debug.WriteLine("Distances");
+                Debug.WriteLine("Blue:{0}", blueDistance);
+                Debug.WriteLine("Green:{0}", greenDistance);
+                Debug.WriteLine("Orange:{0}", orangeDistance);
+                Debug.WriteLine("Red:{0}", redDistance);
+                Debug.WriteLine("Violet:{0}", violetDistance);
+                Debug.WriteLine("White:{0}", whiteDistance);
+                Debug.WriteLine("Yellow:{0}", yellowDistance);
                 return new Gem(GemColor.Unknown, GemType.Unknown);
             }
             return new Gem(color, GemType.Normal);

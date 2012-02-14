@@ -36,6 +36,7 @@ namespace BejeweledBlitzBot.Tests
             SimpleGemClassifier gemClassifier = new SimpleGemClassifier();
             int testedGems = 0;
             int correctGems = 0;
+            int misClassifiedAsUnknown = 0;
         
             foreach(string directory in System.IO.Directory.GetDirectories("..\\..\\TestGems"))
             {
@@ -50,15 +51,19 @@ namespace BejeweledBlitzBot.Tests
                         correctGems++;
                     else
                     {
-                        Console.Error.WriteLine("Misclassified: {0} a {1} gem as a {2} gem", gemPath, expectedColor,
+                        if (gem.Color == GemColor.Unknown)
+                            misClassifiedAsUnknown++;
+                        Console.Error.WriteLine("Misclassified: {0} a {1} gem as an {2} gem", gemPath, expectedColor,
                                                 gem.Color);
-                        gemClassifier.ClassifyGem(new Image<Bgr, byte>(gemPath));
                     }
                     testedGems++;
                 }
             }
             //we aim for 100% precision
             Console.WriteLine("{0} of {1} gems were correctly classified.", correctGems, testedGems);
+            Console.WriteLine("{0} gems incorrectly classified as unknown", misClassifiedAsUnknown);
+            Console.WriteLine("{0}% Precision", (((double)correctGems) / testedGems) * 100);
+            Console.WriteLine("{0}% Precision if we ignore gems classified as unknown", (((double)correctGems) / (testedGems - misClassifiedAsUnknown)) * 100);
             Assert.That(correctGems == testedGems);
         }
 
